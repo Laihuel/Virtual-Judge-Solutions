@@ -1,0 +1,53 @@
+/* Gomez Lihuel
+Edit distance
+*/
+
+import java.util.Scanner;
+import java.io.*;
+
+class EditDistance {
+	public static int ED(String pA,String pB){
+		if (pA==pB){
+			return(0);
+		}
+		if ((pA.length()==0) || (pB.length()==0)){
+			return(Math.max(pA.length(), pB.length()));
+		}
+	
+		int lA=pA.length()+1;
+		int lB= pB.length()+1;
+		
+		int memo[][]=new int[lA][lB];
+		for(int i=0;i<lA;i++){
+			memo[i][0]=i;
+		}
+		for(int i=0;i<lB;i++){
+			memo[0][i]=i;
+		}
+		
+		for(int i=1;i<lA;i++){
+			for(int j=1;j<lB;j++){
+				if(pA.charAt(i-1)==pB.charAt(j-1)){
+					memo[i][j]=memo[i-1][j-1];
+				}else{
+					memo[i][j]=Math.min(memo[i-1][j-1]+1,Math.min(memo[i-1][j]+1,memo[i][j-1]+1));
+				}
+			}
+		}
+		return memo[lA-1][lB-1];
+	} 
+	
+
+	public static void main(String args[]){
+		
+		Scanner in = new Scanner(new BufferedReader(new InputStreamReader(System.in) ));
+		int casos= Integer.parseInt(in.nextLine());
+		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
+		for(int i=0;i<casos;i++){
+			String pA= in.nextLine();
+			String pB= in.nextLine();
+			System.out.println(ED(pA,pB));
+		}
+	}
+	
+}

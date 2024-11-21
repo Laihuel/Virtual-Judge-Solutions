@@ -1,0 +1,146 @@
+def CC(matriz):
+	visitados = []
+	componentes=[]
+	for i in range(0, len(matriz)):
+		visitados.append(False)
+		
+	def dfs(v):
+		visitados[v]=True
+		if v not in componentes[len(componentes)-1]:
+			componentes[len(componentes)-1].append(v)
+		for adyacente in matriz[v]:
+			if not visitados[adyacente[0]]:
+				dfs(adyacente[0])
+	
+	
+	for j in range(1, len(matriz)):
+		if not visitados[j]:
+			componentes.append([j])
+			dfs(j)
+	return(componentes)
+
+def kruskal(componentes, aristas):
+	vertices=[]
+	
+	for c in range(0, max(componentes)+1):
+		vertices.append([c, c, 0])
+	
+	def make_set(vertice):
+		vertice[1]=vertice[0]
+		vertice[2]=0
+	
+	def find_set(vertice):
+		while vertice[0] != vertice[1]:
+			vertice=vertices[vertice[1]]
+		return vertice
+	
+	def union_by_rank(x, y):
+		r= find_set(x)
+		s= find_set(y)
+		if r==s:
+			return True
+		elif r[2]>s[2]:
+			s[1]=r[0]
+		elif s[2]>r[2]:
+			r[1]=s[0]
+		else:
+			r[1]=s[0]
+			s[2]+=1
+			
+	streetsOrdenadas= sorted(aristas,key= lambda a: a[2])
+	mst=[]
+	for e in streetsOrdenadas:
+		if find_set(vertices[e[0]])!=find_set(vertices[e[1]]):
+			mst.append(e)
+			union_by_rank(vertices[e[0]], vertices[e[1]])
+		
+	return(mst)
+	
+def busqueda(matriz, vertices, pA, pB, cantTotalV):
+	cola=[] #En vez de guardar los vertices, en cola guardo calles
+	visitados=[]
+	audio=-1
+	for i in range(0, cantTotalV+1):
+		visitados.append(False)
+	visitados[pA]=True
+	for calle in matriz[pA]:
+		cola.append(calle)
+	while cola:
+		cola= sorted(cola,key= lambda a: a[1])
+		t=cola.pop(0)
+		audio=max(t[1], audio)
+		
+		if t[0]==pB: 
+			return(audio)
+		for calle in matriz[t[0]]:
+			if not visitados[calle[0]]:
+				cola.append(calle)
+				visitados[calle[0]]=True
+	return(audio)
+	
+		
+
+primerLinea= list(map(int, input().split()))
+C= primerLinea[0]
+S= primerLinea[1]
+Q= primerLinea[2]
+nroTest=0
+
+while True:
+	if (C== 0 and S == 0 or Q==0): #si sin todos 0, corto
+		break
+	nroTest+=1
+	if nroTest !=1:
+		print()
+	print("Case #"+str(nroTest))
+	
+	matriz= [[]]
+	aux=[[]]
+	for i in range(0, C):
+		matriz.append([])
+		aux.append([])
+	aristas=[]
+	
+	for i in range (1, S+1): #leo todas las calles
+		street= list(map(int, input().split()))
+		aristas.append(street)
+		matriz[street[0]].append([street[1], street[2]])
+		matriz[street[1]].append([street[0], street[2]])
+		
+	componentes=CC(matriz) #levanto todas las componentes conexas
+	
+	msts=[]
+	matrizComponente=[]
+	for i in componentes:
+		msts.append(None) #inicializo msts
+		matrizComponente.append(aux)
+	callesDeComponente=[] #aca guardo las calles, pero agrupadas por componente
+	for componente in componentes:
+	    callesDeComponente.append([])
+	for arista in aristas:
+	    c=-1
+	    for componente in componentes:
+	        c=c+1
+	        if arista[0] in componente:
+	            callesDeComponente[c].append(arista)
+	            
+	for i in range(0, Q):
+		c = list(map(int, input().split()))
+		mismaComponente=False
+		for componente in range(0, len(componentes)):
+			if c[0] in componentes[componente] and c[1] in componentes[componente]:
+				mismaComponente=True #ya se que hay un camino, y no se devolvera no path
+				if not msts[componente]: #si no esta cargado, genero el mst de esa componente
+					msts[componente]=kruskal(componentes[componente], callesDeComponente[componente])
+					for calle in msts[componente]:
+						matrizComponente[componente][calle[0]].append([calle[1], calle[2]])
+						matrizComponente[componente][calle[1]].append([calle[0], calle[2]])
+				print(busqueda(matrizComponente[componente], componente, c[0], c[1], C))
+				break
+		if not mismaComponente:
+			print("no path")
+		
+	primerLinea= list(map(int, input().split())) #releo
+	C= primerLinea[0]
+	S= primerLinea[1]
+	Q= primerLinea[2]
