@@ -1,0 +1,32 @@
+# Gomez Lacchini Lihuel Joaquin
+# Software CRC
+
+g= 34943
+mensaje = input()
+while mensaje != "#": #Termina cuando entra #
+	resto=0
+	#Calculo el resto del valor del mensaje dividido g
+	for caracter in mensaje:
+		resto= ( (resto*256) + ord(caracter) )% g
+	#Calculo el resto del valor del mensaje con dos bytes vacios dividido g
+	resto= (resto*256*256)%g
+	#En CRCdecimal calculo cuanto falta para llegar a un multiplo de g (g-resto)
+	#El %g es por si resto da 0, que devuelva 0 y no g
+	CRCdecimal=(g-resto)%g
+
+
+	#En CRCdecimal ya tengo el resultado del CRC de ese mensaje, ahora
+	#hay que presentarlo como pide el output
+	#Se convierte a decimal:
+	CRChex= hex(CRCdecimal) 
+	#Al convertir a decimal se genera en modo 0xaaa, entonces le quito el "0x":
+	CRChex=CRChex[2:(len(CRChex)+1)] 
+	#Convierto las letras a mayuscula:
+	CRChex=CRChex.upper()
+	#Si es menor de 4 digitos, entonces lo relleno con ceros delante:
+	while len(CRChex)!=4:
+		CRChex="0"+CRChex
+	#Al imprimir pongo un espacio entre el primer byte y el segundo:
+	print(CRChex[:2]+" "+CRChex[2:])
+	
+	mensaje = input()
