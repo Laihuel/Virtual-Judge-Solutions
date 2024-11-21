@@ -1,0 +1,55 @@
+#Gomez Lihuel
+#Points in figure R y C
+
+import math
+
+def distanciaEntrePuntos(puntoA, puntoB):
+	#Formula de distancia entre puntos
+	#Raiz cuadrada de: ( (x1-x2) al cuadrado + (y1-y2)al cuadrado )
+	d1= (float(puntoA[0])-float(puntoB[0]))**2
+	d2 = (float(puntoA[1])-float(puntoB[1]))**2
+	r=(math.sqrt(d1+d2))
+	return(r)
+
+def estaDentroC(punto, figura):
+	#Si la distancia del centro al punto es menor que el radio, esta dentro
+	return (distanciaEntrePuntos(punto, [figura[1], figura[2]])<float(figura[3]))
+	
+def estaDentroR(punto, figura):
+	#Si el punto esta abajo a la derecha del primero que me dan del rectangulo
+	c1=float(punto[0])>float(figura[1]) and float(punto[1])<float(figura[2])
+	#Y arriba a la izquierda del segundo
+	c2=float(punto[0])<float(figura[3]) and float(punto[1])>float(figura[4])
+	#Entonces Esta dentro del rectangulo
+	return(c1 and c2)
+
+def estaDentro(punto, figura):
+	if figura[0]=="c":
+		return(estaDentroC(punto, figura))
+	else:
+		return(estaDentroR(punto, figura))
+
+
+figuras= []
+nroFigura= 0
+while True:	#Leo todas las figuras
+	nroFigura+=1
+	figura= input().split()
+	if figura[0]=="*":
+		break
+	else:
+		figura.append(nroFigura)
+		figuras.append(figura)
+		
+punto= list(map(float, input().split()))
+nroPunto= 0
+while punto[0]!= 9999.9 and punto[1]!= 9999.9: #Voy leyendo todos los puntos
+	nroPunto+=1
+	seEncontro=False
+	for figura in figuras: #Recorro todas las figuras
+		if estaDentro(punto, figura): #Si esta contenido, imprimo y actualizo seEncontro
+			print("Point", nroPunto, "is contained in figure", figura[-1])
+			seEncontro=True
+	if not seEncontro: #Si no era contenido por ninguna figura, aviso
+		print("Point", nroPunto, "is not contained in any figure")
+	punto= list(map(float, input().split()))

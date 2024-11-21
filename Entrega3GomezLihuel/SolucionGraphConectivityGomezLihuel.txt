@@ -1,0 +1,44 @@
+# Graph conectivity
+#Gomez Lihuel
+
+def CC(matriz):
+	visitados = []
+	componentes=0
+	for i in range(0, len(matriz)):
+		visitados.append(False)
+		
+	def dfs(v):
+		visitados[v]=True
+		for adyacente in matriz[v]:
+			if not (visitados[adyacente]):
+				dfs(adyacente)
+	
+	
+	for j in range(1, len(matriz)):
+		if not (visitados[j]):
+			componentes=componentes+1
+			dfs(j)
+	return(componentes)
+	
+casos= int(input())
+input()
+
+for i in range(0, casos):
+    
+	letraMax=ord(input())-64
+	matriz= [[]]
+	for j in range(0, letraMax):
+		matriz.append([])
+	par=input()
+	while(par != ""):
+		try:
+			matriz[ord(par[0])-64].append(ord(par[1])-64)
+			matriz[ord(par[1])-64].append(ord(par[0])-64)
+			par=input()
+		except EOFError:
+			break
+	print(CC(matriz))
+	if i!=casos-1:
+		print()
+
+	

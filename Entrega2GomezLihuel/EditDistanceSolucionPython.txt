@@ -1,0 +1,42 @@
+
+def ED(pA, pB):
+	if pA==pB:
+		return(0)
+	if len(pA)==0 or len(pB)==0:
+		return(max(len(pA), len(pB)))
+		
+	lA = len(pA)+1
+	lB = len(pB)+1
+	memo = [0]*lA
+	#print(memo)
+	for i in range(lA):
+		memo[i]=[0]*lB
+	#print(memo)
+	for i in range(lA):
+		memo[i][0]=i
+	#print(memo)
+	for i in range(lB):
+		memo[0][i]=i
+	print(memo)
+
+	
+	for i in range(1, lA):
+		for j in range(1, lB):
+			if (pA[i-1]==pB[j-1]):
+				memo[i][j]=memo[i-1][j-1]
+			else:
+				memo[i][j]= min((memo[i-1][j-1]+1), (memo[i-1][j]+1), (memo[i][j-1]+1))
+	#print(memo)
+	
+	return(memo[lA-1][lB-1])
+
+
+casos= int(input())
+
+for i in range(casos):
+	pA = input()
+	pB = input()
+	print(ED(pA, pB))
+	
+	
+	

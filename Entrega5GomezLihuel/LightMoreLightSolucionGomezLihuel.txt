@@ -1,0 +1,28 @@
+import math
+
+def cantidadDivisoresImpar(n):
+	cantDiv=0
+	raizEntera=int(math.sqrt(n))
+	"""
+	#Para calcular la cantidad de divisores, recorro los enteros desde 1 hasta la raiz cuadrada de n
+	for i in range(1, raizEntera):
+		if n%i==0:	#Por cada divisor que encuentro
+			#Sumo dos a la cantidad de divisores, por el que encontre y el que le corresponde>=raiz de n
+			cantDiv= cantDiv+2 
+	#En realidad, si sumo dos cada vez que encuentro uno en realidad nunca me va a cambiar en si es par o no
+	"""
+	if (math.sqrt(n)-raizEntera)==0: #La raiz solo cuenta si es un numero entero
+		#Y es la unica que el que le corresponde>=sqrt(n) es igual
+		cantDiv=cantDiv+1 #Entonces solo suma 1 a la cantida de divisores
+
+	return (cantDiv%2)!=0 #Devuelve True si es impar
+	
+numero = int(input())
+while numero != 0:
+	#Las luces arrancan apagadas, para que una quede prendida la tiene que apretar 1, 3, 5... veces
+	#O sea que si la cantidad de divisores es impar, la luz queda prendida
+	if cantidadDivisoresImpar(numero):
+		print("yes")
+	else:
+		print("no")
+	numero = int(input())

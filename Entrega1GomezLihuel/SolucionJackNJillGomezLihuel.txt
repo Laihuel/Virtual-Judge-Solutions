@@ -1,0 +1,22 @@
+#Jack and Jill
+from sys import stdin, stdout
+
+respuestas= []
+while (True):
+    nym = list(map(int, input().split()))
+    if (nym[0] == 0) and (nym[1] == 0):
+        break
+    else:
+        cdsJack = set()
+        repetidos = 0
+        for i in range (nym[0]):
+            cd = int(stdin.readline())
+            cdsJack.add(cd)
+        for j in range (nym[1]):
+            cd = int(stdin.readline())
+            if cd in cdsJack:
+                repetidos= repetidos+1
+        respuestas.append(repetidos)
+
+for k in respuestas:
+    print(k)

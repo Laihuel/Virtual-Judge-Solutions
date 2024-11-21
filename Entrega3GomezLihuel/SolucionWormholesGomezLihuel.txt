@@ -1,0 +1,36 @@
+#Wormholes
+#Gomez Lihuel
+import sys
+
+casos = int(input())
+for c in range(1, casos+1):
+	nym= list(map(int, input().split()))
+	n=nym[0] #cantidad de sistemas
+	m=nym[1] #cantidad de agujeros de gusano/calles
+	
+	
+	agujeros=[]
+	for i in range (0, m):
+		agujero= list(map(int, input().split()))
+		agujeros.append(agujero)
+		
+	d=[] #Guardo la distancia a cada punto desde el inicio, se inicializa en max
+	p=[] #Guardo el padre de cada nodo
+	for i in range(0, n):
+		d.append(sys.maxsize)
+		p.append(None)
+	d[0]=0
+			
+	for i in range(0, n): #partiendo desde cada sistema
+		for a in agujeros: #por cada agujero
+			if d[a[1]]>(d[a[0]]+a[2]): #Si la distancia que dejo al sistema es menor que la actual 
+				d[a[1]]=d[a[0]]+a[2] #Actualizo
+				p[a[1]]=a[0]
+	
+	ans="not possible"
+	for a in agujeros: #despues de recorrer todo 
+			if d[a[1]]>(d[a[0]]+a[2]): #si hago otra recorrida y todavia es achicable, hay ciclo negativo
+				ans="possible"
+				break
+	
+	print(ans)

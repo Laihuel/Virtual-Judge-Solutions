@@ -1,0 +1,55 @@
+#Lining Up
+#Gomez Lihuel
+
+import sys
+import bisect 
+
+cero= 0.000001
+
+cantidadDeCasos=int(input())
+if cantidadDeCasos>0:
+	blankLine=input()
+ultimo=False #Para no imprimir un blanco de mas
+for i in range(0, cantidadDeCasos):
+	coordenadas=[]
+	while True: #Leo todas las coordenadas de un caso
+		try:
+			coord = list(map(int, input().split()))
+			if coord:
+				coordenadas.append(coord)
+			else: #Corto si es un espacio en blanco
+				break
+		except EOFError: #O si termino el input
+			ultimo=True
+			break
+	
+	coOrdenadas = sorted(coordenadas, key=lambda coord : coord[1]) #ordenadas por y
+	maximosPEnLinea=1
+	
+	for punto in range(0, len(coOrdenadas)): #Para todos los puntos
+		pendientes=[]
+		for posterior in range (punto+1, len(coOrdenadas)): #Recorrer todos los de indice mayor
+			pendiente= sys.maxsize #Por default, como si estuvieran en el mismo eje x (pendiente infinito)
+			if coOrdenadas[posterior][0]!=coOrdenadas[punto][0]: #Si no, calculo pendiente
+				pendiente= (coOrdenadas[punto][1]-coOrdenadas[posterior][1])/(coOrdenadas[punto][0]-coOrdenadas[posterior][0])
+			bisect.insort(pendientes, pendiente) #Inserto en pendientes ordenadamente
+
+		pendActual=-1
+		maxEnLinea=0
+		contador=0
+		for pendiente in pendientes: #Recorro todas las pendientes buscando la mayor cantidad de iguales
+			contador+=1
+			if abs(pendActual-pendiente)>0:
+				contador=1
+				pendActual=pendiente
+			if contador>maxEnLinea:
+				maxEnLinea=contador
+		maxEnLinea+=1
+		
+		if maxEnLinea>maximosPEnLinea:#Si el maximo encontrado en este punto es mayor que el que tengo general del caso
+			maximosPEnLinea=maxEnLinea #Actualizo
+	
+		
+	print(maximosPEnLinea)
+	if not ultimo:
+		print()

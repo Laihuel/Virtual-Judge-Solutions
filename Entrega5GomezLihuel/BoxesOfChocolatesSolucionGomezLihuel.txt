@@ -1,0 +1,26 @@
+#Gomez Lihuel
+#Boxes of chocolates
+
+
+casos= int(input())
+for i in range (0, casos):
+	nyb= list(map(int, input().split()))
+	amigos=nyb[0]
+	cajasGrandes=nyb[1]
+	
+	restantes=0
+	for j in range (0, cajasGrandes): #Por cada caja del test
+		caja= list(map(int, input().split()))
+		cantChocolates=1
+		for c in range (1, caja[0]+1): #Calculo cuantos chocolates tiene la caja
+		#Cada intancia de la caja contiene la cantidad de subcajas que es su numero, por eso
+		#multiplica. El ultimo es la cantidad de chocolates en la instancia de caja mas pequeña
+		#Asi que multiplicar todos los enteros da la cantidad de chocolates en esa caja
+			cantChocolates=cantChocolates*caja[c]
+		#A los chocolates que tenia sobrantes, le sumo la cantidad de chocolates de la caja y vuelvo a hacer
+		#el mod quedandome con la cantidad restante. Podria hacer el %amigos al final
+		#Pero ir haciendolo sobre la marcha achica mucho el numero
+		restantes=(restantes+cantChocolates)%amigos 
+	#En restantes me queda la respuesta del caso
+	print(restantes)
+	

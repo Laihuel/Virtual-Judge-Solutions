@@ -1,0 +1,26 @@
+#ELIS Gomez Lihuel
+cantidad = int(input())
+numeros = list(map(int, input().split()))
+
+arrMemo = []
+for i in range (0,cantidad):
+    arrMemo.append(-1)
+prev = []
+for i in range (0,cantidad):
+    prev.append(-1)
+ 
+def LIS(idx):
+    if(arrMemo[idx]!=-1):
+        return arrMemo[idx]
+    arrMemo[idx]=1
+    for i in range (0, idx):
+        if (numeros[i]<numeros[idx]) and arrMemo[idx]<(LIS(i)+1):
+            arrMemo[idx] = LIS(i)+1
+            prev[idx] = i
+    return(arrMemo[idx])
+
+
+for i in range(0, cantidad):
+    LIS(i)
+
+print(max(arrMemo))

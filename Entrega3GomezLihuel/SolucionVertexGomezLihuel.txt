@@ -1,0 +1,46 @@
+#Vertex
+#Gomez Lihuel
+
+def alcanzables(matriz, V):
+	visitados = [False]
+	alcanzables=[]
+	for i in range(1, len(matriz)):
+		visitados.append(False)
+		
+	def dfs(v):
+		for adyacente in matriz[v]:
+			if not visitados[adyacente]:
+				visitados[adyacente]=True
+				alcanzables.append(adyacente)
+				dfs(adyacente)
+				
+	dfs(V)
+	return(alcanzables)
+	
+n= int(input())
+while(n!=0):
+	matriz=[[]]
+	for i in range(0, n):
+		matriz.append([])
+	
+	conexiones= list(map(int, input().split()))
+	while conexiones[0]!=0:
+		for c in range (1,len(conexiones)-1):
+			matriz[conexiones[0]].append(conexiones[c])
+		conexiones= list(map(int, input().split()))
+	
+	aInvestigar=list(map(int, input().split()))
+	for i in range (1, len(aInvestigar)):
+		a=alcanzables(matriz, aInvestigar[i])
+		nA=[]
+		for i in range(1, n+1):
+			if i not in a:
+				nA.append(i)
+		
+		ans=str(len(nA))
+		for v in nA:
+			ans=ans+" "+str(v)
+		print(ans)
+		
+	
+	n=int(input())

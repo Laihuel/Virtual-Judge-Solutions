@@ -1,0 +1,28 @@
+#Bars
+#GomezLihuel
+def masCercano(barras, medidaBuscada):
+    barras.insert(0, 0)
+    memo=[0]*(len(barras))
+    for i in range(len(barras)):
+        memo[i]=[0]*(medidaBuscada+1)
+
+    for i in range(1, len(barras)):
+        for j in range(1, medidaBuscada+1):
+
+            if(barras[i]>j):
+                memo[i][j]=memo[i-1][j]
+
+            else:
+                memo[i][j]=max(memo[i-1][j], memo[i-1][j-barras[i]]+barras[i])
+                
+    return(memo[len(barras)-1][medidaBuscada])
+
+cantidad= int(input())
+for i in range (cantidad):
+    medidaBuscada= int(input())
+    cantidadDeBarras= int(input())
+    barras = list(map(int, input().split()))
+    if(masCercano(barras, medidaBuscada)==medidaBuscada):
+        print("YES")
+    else:
+        print("NO")
